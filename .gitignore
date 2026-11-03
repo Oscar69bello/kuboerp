@@ -1,0 +1,26 @@
+# Java / Maven / IntelliJ
+java/target/
+java/.idea/
+*.iml
+
+# JavaScript / Node
+js/node_modules/
+js/coverage/
+
+# .NET
+dotnet/**/bin/
+dotnet/**/obj/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,35 @@
+PS C:\KuboERP\dotnet\KuboERP.Specs> dotnet test
+Restauración completada (3,9s)
+    info NETSDK1057: Está usando una versión preliminar de .NET. Visite: https://aka.ms/dotnet-support-policy
+  KuboERP.Specs net10.0 realizado correctamente (3,5s) → bin\Debug\net10.0\KuboERP.Specs.dll
+NUnit Adapter 5.0.0.0: Test execution started
+Running all tests in C:\KuboERP\dotnet\KuboERP.Specs\bin\Debug\net10.0\KuboERP.Specs.dll
+   NUnit3TestExecutor discovered 3 of 3 NUnit test cases using Current Discovery mode, Non-Explicit run
+Dado que el producto "BRK-2X30" tiene stock 2
+-> done: InventoryStepDefinitions.DadoQueElProductoTieneStock("BRK-2X30", 2) (0,0s)
+Cuando intento retirar 5 unidades
+-> done: InventoryStepDefinitions.CuandoIntentoRetirar(5) (0,0s)
+Entonces se lanza InsufficientStockException
+-> done: InventoryStepDefinitions.EntoncesSeLanzaInsufficientStockException() (0,3s)
+Y el stock permanece en 2
+-> done: InventoryStepDefinitions.EntoncesElStockPermaneceEn(2) (0,0s)
+
+Dado que no existe un producto con código "PINZA-VA-01"
+-> done: InventoryStepDefinitions.DadoQueNoExisteProducto("PINZA-VA-01") (0,0s)
+Cuando registro el producto con código "PINZA-VA-01" y stock inicial 8
+-> done: InventoryStepDefinitions.CuandoRegistroProducto("PINZA-VA-01", 8) (0,0s)
+Entonces el producto se crea con estado "DISPONIBLE"
+-> done: InventoryStepDefinitions.EntoncesProductoSeCreaConEstado("DISPONIBLE") (0,0s)
+
+Dado que el producto "BRK-2X30" tiene stock 40
+-> done: InventoryStepDefinitions.DadoQueElProductoTieneStock("BRK-2X30", 40) (0,0s)
+Cuando intento retirar 5 unidades
+-> done: InventoryStepDefinitions.CuandoIntentoRetirar(5) (0,0s)
+Entonces el stock queda en 35
+-> done: InventoryStepDefinitions.EntoncesElStockQuedaEn(35) (0,0s)
+
+NUnit Adapter 5.0.0.0: Test execution complete
+  KuboERP.Specs net10.0 realizado correctamente prueba (5,0s)
+
+Resumen de pruebas: total: 3; con errores: 0; correcto: 3; omitido: 0; duración: 5,0 s
+Compilación realizado correctamente en 16,4s

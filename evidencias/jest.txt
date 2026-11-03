@@ -1,0 +1,15 @@
+PS C:\KuboERP\js> npm test
+
+> kuboerp-pruebas-jest@1.0.0 test
+> jest
+
+ PASS  __tests__/supplierService.test.js
+ PASS  __tests__/quotationService.test.js
+ PASS  __tests__/purchaseOrderService.test.js
+ PASS  __tests__/inventoryService.test.js
+
+Test Suites: 4 passed, 4 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.543 s, estimated 1 s
+Ran all test suites.

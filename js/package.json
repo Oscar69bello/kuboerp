@@ -1,0 +1,18 @@
+{
+  "name": "kuboerp-pruebas-jest",
+  "version": "1.0.0",
+  "description": "KuboERP - Pruebas unitarias con Jest de los servicios CRUD (proveedores, cotizaciones, órdenes de compra e inventario)",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": ["/node_modules/"],
+    "testMatch": ["**/__tests__/**/*.js", "**/?(*.)+(spec|test).js"]
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

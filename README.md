@@ -17,13 +17,14 @@ con **pruebas unitarias desde el primer minuto** (TDD) y escenarios de comportam
 ## Gestión ágil
 
 Cronograma de iteraciones, roles, Product Backlog y actas de cada sprint en [`docs/`](docs/README.md).
+Arquitectura (arc42) en [`docs/arquitectura/arc42.md`](docs/arquitectura/arc42.md); infraestructura en `infra/terraform/`; CI en `.github/workflows/ci.yml`.
 Tablero de seguimiento: **GitHub Projects · KuboERP · Scrum** (pestaña *Projects* del repositorio).
 
 ## Resultados de las pruebas
 
 | Proyecto | Herramientas | Resultado |
 |---|---|---|
-| `python/` | unittest, pytest, Behave, coverage.py · Google Colab | 27 pruebas unitarias, 20 escenarios BDD (78 pasos), cobertura **100 %** |
+| `python/` | unittest, pytest, Behave, coverage.py · Google Colab | 101 pruebas unitarias, 25 escenarios BDD (97 pasos), cobertura **100 %** |
 | `java/` | JUnit 5, Mockito, Cucumber | 18 pruebas unitarias + 19 escenarios = **37 aprobadas** |
 | `js/` | Jest | **15 aprobadas** |
 | `dotnet/` | SpecFlow (Reqnroll), NUnit, FluentAssertions | **3 escenarios aprobados** |

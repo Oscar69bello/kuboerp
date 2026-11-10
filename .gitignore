@@ -24,3 +24,11 @@ venv/
 # Sistema
 .DS_Store
 Thumbs.db
+reporte-pruebas.xml
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan

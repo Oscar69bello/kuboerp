@@ -50,3 +50,29 @@ presupuesto y sin doble aprobación, y bloqueo de retiros mayores al stock.
 El tablero del proyecto está en **GitHub Projects** (*KuboERP · Scrum*), ligado al repositorio: cada iteración es un
 *milestone* y cada historia o tarea es un *issue*. La Definition of Done del Sprint 1 nombraba Azure Boards; se
 cambió por el impedimento descrito en la retrospectiva.
+
+---
+
+## Segunda parte · Sprint Planning, arquitectura ágil y CRUD en Python
+**Sprint Planning:** 3 de noviembre de 2026 · Sprint Review: 14 de noviembre de 2026
+
+**Sprint Goal:** al finalizar el Sprint 2, el Jefe de Compras, el Administrador de Inventario y el Jefe de Talento
+Humano cuentan con un incremento probado que gestiona proveedores, cotizaciones, órdenes de compra e inventario con
+alertas de stock crítico y que calcula la nómina mensual, desplegable en Azure mediante infraestructura automatizada y
+con la seguridad documentada en arc42.
+
+**Capacidad:** 56 h · **Compromiso:** 17 tareas, 54 h. Historias (rebanada de dominio): EP05-US01, US02, US04, US05,
+US06, US07 · EP01-US04 · EP07-US02, US03, US04 · EP06-US01, US02, US03, US04. Historias técnicas: HT-01 Terraform,
+HT-02 GitHub Actions, HT-03 arc42.
+
+| Resultado | Evidencia |
+|---|---|
+| CRUD completo de proveedores, cotizaciones, órdenes, inventario y empleados | `python/kuboerp/` |
+| Stock crítico con alertas (Observer) y motor de nómina 2026 | `inventario.py`, `nomina.py` |
+| 101 pruebas unitarias, 25 escenarios BDD, cobertura 100 % | `python/tests/`, `python/features/` |
+| Infraestructura como código en Azure | `infra/terraform/` |
+| Integración continua | `.github/workflows/ci.yml` |
+| Arquitectura arc42 v2.0 con seguridad y STRIDE | [`docs/arquitectura/arc42.md`](../arquitectura/arc42.md) |
+| Documento de entrega (PDF/A) | [`entrega/`](entrega/) |
+
+**Pendiente:** `terraform apply` en Azure (falta la suscripción) y aceptación del Product Owner en la Sprint Review.

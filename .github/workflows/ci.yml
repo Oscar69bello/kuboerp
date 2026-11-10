@@ -1,0 +1,126 @@
+# KuboERP · Integración continua del incremento en Python y de la infraestructura como código.
+#
+# Cada push o pull request ejecuta la Definition of Done de forma automática:
+#   1. Pruebas unitarias (pytest + unittest) y escenarios BDD (Behave).
+#   2. Cobertura con coverage.py: el job falla si baja del 80 % (python/.coveragerc).
+#   3. Terraform: formato y validación sin credenciales.
+# El plan contra Azure solo se ejecuta a mano (workflow_dispatch) y usa OIDC, sin contraseñas guardadas.
+name: CI KuboERP
+
+on:
+  push:
+    branches: [main, "sprint-*/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pruebas-python:
+    name: Pruebas y cobertura (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: python/requirements.txt
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Pruebas unitarias con cobertura
+        run: python -m coverage run -m pytest -v --junitxml=reporte-pruebas.xml
+
+      - name: Verificar cobertura mínima (DoD ≥ 80 %)
+        run: |
+          python -m coverage report
+          python -m coverage html
+
+      - name: Escenarios BDD (Behave)
+        run: python -m behave --format progress
+
+      - name: Publicar reportes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-python-${{ matrix.python }}
+          path: |
+            python/reporte-pruebas.xml
+            python/htmlcov/
+
+  terraform:
+    name: Terraform fmt y validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Formato
+        run: terraform fmt -check -recursive
+
+      - name: Inicializar sin backend
+        run: terraform init -backend=false
+
+      - name: Validar
+        run: terraform validate
+
+  plan-azure:
+    name: Plan del ambiente de pruebas en Azure
+    if: github.event_name == 'workflow_dispatch'
+    needs: [pruebas-python, terraform]
+    runs-on: ubuntu-latest
+    environment: test
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_USE_OIDC: "true"
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Inicializar con estado remoto
+        run: >
+          terraform init
+          -backend-config="resource_group_name=${{ vars.TFSTATE_RESOURCE_GROUP }}"
+          -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}"
+          -backend-config="container_name=tfstate"
+          -backend-config="key=kuboerp-test.tfstate"
+          -backend-config="use_oidc=true"
+
+      - name: Plan
+        run: >
+          terraform plan -input=false
+          -var-file=ambientes/test.tfvars
+          -var="sql_admin_object_id=${{ secrets.SQL_ADMIN_OBJECT_ID }}"
+          -out=kuboerp-test.tfplan

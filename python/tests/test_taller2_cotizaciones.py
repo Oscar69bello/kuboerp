@@ -12,6 +12,7 @@ def repo():
     repo = MagicMock()
     repo.find_request.return_value = "ABIERTA"
     repo.exists_by_request_and_supplier.return_value = False
+    repo.find_by_codigo.return_value = None   # Sprint 2: el código de la cotización debe ser único
     repo.save.side_effect = lambda cotizacion: cotizacion
     return repo
 

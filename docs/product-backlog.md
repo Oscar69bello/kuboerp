@@ -32,4 +32,16 @@ Owner adelantó historias de EP05 y EP07 que estaban planeadas para los sprints 
 | EP07-US03 | Registrar entradas y salidas de inventario | Entradas y retiros con kardex; no se retira más del stock disponible | **Hecho** (sin traslados entre bodegas) |
 | EP01-US04 | Gestión y actualización de stock | Registro de productos con código único, stock ≥ 0 y categoría obligatoria | **Hecho** (sin carga masiva ni alertas) |
 
-Las demás historias siguen en el backlog para los sprints de desarrollo planeados.
+### Segunda parte del Sprint 2 (Sprint Planning del 3 de noviembre)
+
+| ID | Historia | Alcance agregado | Estado |
+|---|---|---|---|
+| EP05-US01, US02, US04 | Proveedores | Consulta (listar) y actualización | **Hecho** (dominio) |
+| EP05-US05, US06 | Órdenes de compra | Líneas de producto, recibir con entrada de inventario, cancelar con justificación, auditoría | **Hecho** (dominio) |
+| EP05-US07 | Cotizaciones | Abrir solicitud, listar por precio, actualizar, seleccionar ganadora, anular | **Hecho** (dominio) |
+| EP07-US02, US03, US04 · EP01-US04 | Inventario | Stock mínimo, alertas de stock crítico, listar, actualizar, inactivar | **Hecho** (dominio) |
+| EP06-US01, US02, US03 | Empleados | Registro, consulta y actualización de contrato con historial | **Hecho** (dominio) |
+| EP06-US04 | Calcular la nómina | Motor de nómina con parámetros de 2026 | **Hecho** (dominio) |
+
+"Hecho (dominio)" significa reglas de negocio, servicios y pruebas; la interfaz, la API y la persistencia en Azure SQL
+quedan para los sprints de desarrollo. Las demás historias siguen en el backlog para los sprints de desarrollo planeados.

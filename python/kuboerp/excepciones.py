@@ -1,4 +1,4 @@
-"""Excepciones de negocio de KuboERP (Compras, Logística y Almacén)."""
+"""Excepciones de negocio de KuboERP (Compras, Logística, Almacén y Talento Humano)."""
 
 
 class InvalidSupplierException(Exception):
@@ -14,7 +14,7 @@ class InvalidQuotationException(Exception):
 
 
 class PurchaseOrderException(Exception):
-    """La orden de compra no se puede aprobar."""
+    """La orden de compra no se puede crear o no se puede cambiar de estado."""
 
 
 class InvalidProductException(Exception):
@@ -23,3 +23,7 @@ class InvalidProductException(Exception):
 
 class InsufficientStockException(Exception):
     """El retiro supera el stock disponible."""
+
+
+class InvalidEmployeeException(Exception):
+    """El empleado no cumple las reglas de registro o de contrato."""

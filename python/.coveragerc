@@ -1,0 +1,9 @@
+[run]
+source = kuboerp
+
+[report]
+show_missing = true
+fail_under = 80
+# Los métodos de los protocolos (repositorios.py) solo declaran el contrato: su cuerpo "..." nunca se ejecuta.
+exclude_also =
+    def .*: \.\.\.$

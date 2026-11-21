@@ -45,9 +45,9 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+    // En producción todo va por https; en desarrollo se permite http para no depender del certificado local
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 app.MapStaticAssets();

@@ -1,0 +1,183 @@
+/* KuboERP · identidad visual: azul noche + cian */
+:root {
+    --noche: #0b1a33;
+    --noche-2: #102449;
+    --cian: #0e7490;
+    --cian-claro: #22a3be;
+    --fondo: #f3f6fa;
+    --tarjeta: #ffffff;
+    --texto: #1e293b;
+    --suave: #64748b;
+    --borde: #e2e8f0;
+    --ok: #15803d;
+    --alerta: #b45309;
+    --peligro: #b91c1c;
+}
+
+html { font-size: 15px; }
+body {
+    margin: 0;
+    font-family: Inter, "Segoe UI", system-ui, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    display: flex;
+    min-height: 100vh;
+}
+h1, h2, h3, h4, h5, .fw-titulo { font-family: Poppins, Inter, sans-serif; }
+
+/* ---------- Menú lateral ---------- */
+.lateral {
+    width: 250px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, var(--noche) 0%, var(--noche-2) 100%);
+    color: #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+.marca {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: 1.4rem 1.2rem 1.2rem;
+    text-decoration: none;
+    color: #fff;
+}
+.cubo {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--cian-claro), #2563eb);
+    display: grid; place-items: center;
+    font: 700 1.4rem Poppins, sans-serif;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(34, 163, 190, .35);
+}
+.marca .nombre { display: block; font: 700 1.35rem Poppins, sans-serif; line-height: 1.1; }
+.marca .nombre b { color: var(--cian-claro); }
+.marca .lema { display: block; font-size: .58rem; letter-spacing: .08em; color: #94a3b8; }
+
+.lateral nav { padding: .4rem .7rem; flex: 1; overflow-y: auto; }
+.lateral .grupo {
+    font-size: .68rem; text-transform: uppercase; letter-spacing: .1em;
+    color: #64748b; margin: 1.1rem .7rem .35rem;
+}
+.lateral nav a {
+    display: flex; align-items: center; gap: .65rem;
+    padding: .55rem .8rem;
+    border-radius: 9px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.lateral nav a i { font-size: 1.05rem; }
+.lateral nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
+.lateral nav a.activo { background: rgba(34, 163, 190, .18); color: #fff; box-shadow: inset 3px 0 0 var(--cian-claro); }
+.pie-lateral {
+    display: flex; gap: .6rem; align-items: center;
+    padding: 1rem 1.2rem; border-top: 1px solid rgba(255,255,255,.08); font-size: .82rem;
+}
+.pie-lateral small { color: #94a3b8; }
+.punto { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 4px rgba(34,197,94,.18); }
+
+/* ---------- Área de contenido ---------- */
+.contenido { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.barra {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 2rem;
+    background: #fff;
+    border-bottom: 1px solid var(--borde);
+    position: sticky; top: 0; z-index: 10;
+}
+.barra h1 { font-size: 1.45rem; margin: 0; font-weight: 600; }
+.migas { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--cian); font-weight: 600; }
+.usuario { display: flex; gap: .6rem; align-items: center; font-size: .85rem; }
+.usuario small { color: var(--suave); }
+.avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--noche); color: #fff; display: grid; place-items: center; font-weight: 600; font-size: .85rem;
+}
+main { padding: 1.6rem 2rem 3rem; }
+.aviso { border-radius: 10px; }
+
+/* ---------- Componentes ---------- */
+.tarjeta {
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: 1.2rem 1.3rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+}
+.tarjeta h2 { font-size: 1.02rem; font-weight: 600; margin: 0 0 .9rem; }
+.tarjeta h2 small { font-family: Inter, sans-serif; font-weight: 400; color: var(--suave); font-size: .8rem; margin-left: .3rem; }
+
+.kpi { display: flex; flex-direction: column; gap: .3rem; height: 100%; }
+.kpi .icono {
+    width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center;
+    background: #ecfeff; color: var(--cian); font-size: 1.15rem; margin-bottom: .3rem;
+}
+.kpi .icono.ambar { background: #fffbeb; color: var(--alerta); }
+.kpi .icono.rojo { background: #fef2f2; color: var(--peligro); }
+.kpi .icono.verde { background: #f0fdf4; color: var(--ok); }
+.kpi .etiqueta { font-size: .8rem; color: var(--suave); }
+.kpi .valor { font: 600 1.45rem Poppins, sans-serif; line-height: 1.2; }
+.kpi .nota { font-size: .75rem; color: var(--suave); }
+
+.tabla { width: 100%; font-size: .88rem; border-collapse: collapse; }
+.tabla th {
+    font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--suave);
+    font-weight: 600; padding: .55rem .6rem; border-bottom: 1px solid var(--borde); text-align: left; white-space: nowrap;
+}
+.tabla td { padding: .65rem .6rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.tabla tr:last-child td { border-bottom: 0; }
+.tabla tbody tr:hover { background: #f8fafc; }
+.tabla .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tabla tr.critico td { background: #fff7ed; }
+.tabla a { color: var(--texto); font-weight: 500; text-decoration: none; }
+.tabla a:hover { color: var(--cian); }
+.codigo { font-family: Consolas, monospace; font-size: .82rem; color: var(--cian); }
+
+.estado {
+    display: inline-block; font-size: .7rem; font-weight: 600; letter-spacing: .04em;
+    padding: .2rem .55rem; border-radius: 999px;
+}
+.estado-ok { background: #dcfce7; color: #166534; }
+.estado-pend { background: #fef3c7; color: #92400e; }
+.estado-info { background: #dbeafe; color: #1e40af; }
+.estado-off { background: #f1f5f9; color: #64748b; }
+.etiqueta-critico { background: #fee2e2; color: #991b1b; font-size: .68rem; font-weight: 700; padding: .15rem .45rem; border-radius: 6px; }
+
+.btn-kubo { background: var(--cian); border-color: var(--cian); color: #fff; font-weight: 500; }
+.btn-kubo:hover { background: #155e75; border-color: #155e75; color: #fff; }
+.btn { border-radius: 9px; }
+.form-control, .form-select { border-radius: 9px; }
+.form-label { font-size: .82rem; font-weight: 600; color: #334155; margin-bottom: .3rem; }
+.filtros { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+.filtros .form-control, .filtros .form-select { width: auto; min-width: 180px; }
+
+.barra-stock { height: 7px; background: #f1f5f9; border-radius: 99px; overflow: hidden; min-width: 90px; }
+.barra-stock span { display: block; height: 100%; border-radius: 99px; background: var(--cian-claro); }
+.barra-stock span.bajo { background: #ef4444; }
+
+.dato { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px dashed var(--borde); font-size: .9rem; }
+.dato:last-child { border-bottom: 0; }
+.dato span:first-child { color: var(--suave); }
+.total { font: 600 1.05rem Poppins, sans-serif; }
+
+.linea-tiempo { list-style: none; padding: 0; margin: 0; }
+.linea-tiempo li { position: relative; padding: 0 0 1rem 1.4rem; font-size: .86rem; }
+.linea-tiempo li::before { content: ""; position: absolute; left: 3px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: var(--cian-claro); }
+.linea-tiempo li::after { content: ""; position: absolute; left: 7px; top: 16px; bottom: 0; width: 1px; background: var(--borde); }
+.linea-tiempo li:last-child::after { display: none; }
+
+.barra-cat { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; font-size: .85rem; }
+.barra-cat .nombre { width: 150px; color: var(--suave); }
+.barra-cat .pista { flex: 1; height: 10px; background: #f1f5f9; border-radius: 99px; overflow: hidden; }
+.barra-cat .pista span { display: block; height: 100%; background: linear-gradient(90deg, var(--cian), var(--cian-claro)); border-radius: 99px; }
+.barra-cat .monto { width: 120px; text-align: right; font-variant-numeric: tabular-nums; }
+
+.vacio { text-align: center; color: var(--suave); padding: 2rem 1rem; }
+.field-validation-error, .validation-summary-errors { color: var(--peligro); font-size: .8rem; }
+.validation-summary-errors ul { margin: 0; padding-left: 1rem; }

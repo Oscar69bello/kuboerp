@@ -1,0 +1,37 @@
+@model List<OrdenCompra>
+@{
+    ViewData["Title"] = "Órdenes de compra";
+    ViewData["Seccion"] = "Compras";
+    string? estado = ViewBag.Estado;
+    string[] estados = { "PENDIENTE", "APROBADA", "RECIBIDA", "CANCELADA" };
+}
+
+<div class="tarjeta">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div class="btn-group">
+            <a asp-action="Index" class="btn btn-sm @(estado == null ? "btn-kubo" : "btn-outline-secondary")">Todas</a>
+            @foreach (var e in estados)
+            {
+                <a asp-action="Index" asp-route-estado="@e" class="btn btn-sm @(estado == e ? "btn-kubo" : "btn-outline-secondary")">@e</a>
+            }
+        </div>
+        <a asp-action="Crear" class="btn btn-kubo"><i class="bi bi-plus-lg"></i> Nueva orden</a>
+    </div>
+    <table class="tabla">
+        <thead><tr><th>Orden</th><th>Proveedor</th><th>Fecha</th><th class="num">Monto</th><th>Estado</th></tr></thead>
+        <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td><a class="codigo" asp-action="Detalle" asp-route-id="@o.Id">@o.Codigo</a></td>
+                    <td><a asp-action="Detalle" asp-route-id="@o.Id">@o.Proveedor?.Nombre</a></td>
+                    <td>@Ui.Fecha(o.Fecha)</td>
+                    <td class="num">@Ui.Pesos(o.Monto)</td>
+                    <td>@Ui.EstadoOrden(o.Estado)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.Count == 0) { <div class="vacio">No hay órdenes en este estado</div> }
+    <p class="small text-secondary mt-3 mb-0"><i class="bi bi-info-circle"></i> Ciclo de vida: PENDIENTE → APROBADA (descuenta presupuesto) → RECIBIDA (entra al inventario). Se puede cancelar con justificación mientras esté pendiente o aprobada.</p>
+</div>

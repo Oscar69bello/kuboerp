@@ -1,0 +1,55 @@
+@model List<DesprendibleNomina>
+@{
+    ViewData["Title"] = "Nómina";
+    ViewData["Seccion"] = "Talento humano";
+    var periodos = (List<string>)ViewBag.Periodos;
+    string? periodo = ViewBag.Periodo;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <form method="get" class="filtros">
+        <label class="form-label mb-0">Periodo</label>
+        <select name="periodo" class="form-select" onchange="this.form.submit()">
+            @foreach (var p in periodos) { <option value="@p" selected="@(p == periodo)">@Ui.Periodo(p)</option> }
+        </select>
+    </form>
+    <a asp-action="Liquidar" class="btn btn-kubo"><i class="bi bi-calculator"></i> Liquidar nómina</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="tarjeta vacio">Aún no hay nóminas liquidadas</div>
+}
+else
+{
+    <div class="row g-3 mb-3">
+        <div class="col-md-3"><div class="tarjeta kpi"><span class="etiqueta">Empleados liquidados</span><span class="valor">@Model.Count</span></div></div>
+        <div class="col-md-3"><div class="tarjeta kpi"><span class="etiqueta">Total devengado</span><span class="valor">@Ui.Pesos(Model.Sum(d => d.TotalDevengado))</span></div></div>
+        <div class="col-md-3"><div class="tarjeta kpi"><span class="etiqueta">Neto a pagar</span><span class="valor text-success">@Ui.Pesos(Model.Sum(d => d.Neto))</span></div></div>
+        <div class="col-md-3"><div class="tarjeta kpi"><span class="etiqueta">Costo total para la empresa</span><span class="valor">@Ui.Pesos(Model.Sum(d => d.CostoEmpleador))</span></div></div>
+    </div>
+
+    <div class="tarjeta">
+        <h2>Nómina de @Ui.Periodo(periodo!) <small>liquidada el @Ui.FechaHora(Model.Max(d => d.FechaLiquidacion))</small></h2>
+        <table class="tabla">
+            <thead><tr><th>Empleado</th><th>Cargo</th><th class="num">Días</th><th class="num">Devengado</th><th class="num">Aux. transporte</th><th class="num">No salarial</th><th class="num">Deducciones</th><th class="num">Neto</th><th class="num">Aportes empresa</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var d in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@d.Empleado?.Nombre</td>
+                        <td>@Cargos.Nombre(d.Empleado!.Cargo)</td>
+                        <td class="num">@d.DiasLaborados</td>
+                        <td class="num">@Ui.Pesos(d.DevengadoSalarial)</td>
+                        <td class="num">@Ui.Pesos(d.AuxilioTransporte)</td>
+                        <td class="num">@Ui.Pesos(d.DevengadoNoSalarial)</td>
+                        <td class="num text-danger">−@Ui.Pesos(d.TotalDeducciones)</td>
+                        <td class="num fw-semibold">@Ui.Pesos(d.Neto)</td>
+                        <td class="num">@Ui.Pesos(d.AportesEmpleador)</td>
+                        <td class="text-end"><a asp-action="Desprendible" asp-route-id="@d.Id" class="btn btn-sm btn-outline-secondary"><i class="bi bi-receipt"></i> Desprendible</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

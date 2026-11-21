@@ -1,0 +1,77 @@
+@model Producto
+@{
+    ViewData["Title"] = Model.Nombre;
+    ViewData["Seccion"] = "Logística y almacén · Inventario";
+    var movimientos = (List<MovimientoInventario>)ViewBag.Movimientos;
+}
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="tarjeta mb-3">
+            <h2>Ficha del producto</h2>
+            <div class="dato"><span>Código</span><b class="codigo">@Model.Codigo</b></div>
+            <div class="dato"><span>Categoría</span><span>@Model.Categoria</span></div>
+            <div class="dato"><span>Precio unitario</span><span>@Ui.Pesos(Model.PrecioUnitario)</span></div>
+            <div class="dato"><span>Stock mínimo</span><span>@Model.StockMinimo</span></div>
+            <div class="dato"><span>Stock actual</span><b class="total @(Model.EsCritico ? "text-danger" : "")">@Model.Stock</b></div>
+            <div class="dato"><span>Valor en bodega</span><b>@Ui.Pesos(Model.Stock * Model.PrecioUnitario)</b></div>
+            <div class="dato"><span>Estado</span>@Ui.Estado(Model.Activo ? "ACTIVO" : "INACTIVO")</div>
+            @if (Model.EsCritico)
+            {
+                <div class="alert alert-warning mt-3 mb-0 py-2 small">
+                    <i class="bi bi-exclamation-triangle"></i> Stock crítico. Se sugiere comprar <b>@Model.CantidadSugerida</b> unidades.
+                </div>
+            }
+            <div class="d-flex gap-2 mt-3">
+                <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+                @if (Model.Activo)
+                {
+                    <form asp-action="Inactivar" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('¿Inactivar este producto?')">
+                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-slash-circle"></i> Inactivar</button>
+                    </form>
+                }
+            </div>
+        </div>
+
+        @if (Model.Activo)
+        {
+            <div class="tarjeta">
+                <h2>Registrar movimiento</h2>
+                <form asp-action="Mover" asp-route-id="@Model.Id" method="post">
+                    <div class="mb-2">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" name="cantidad" min="1" value="1" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Detalle</label>
+                        <input name="detalle" class="form-control" placeholder="Ej. Despacho a obra Los Robles" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button name="tipo" value="entrada" class="btn btn-outline-success flex-fill"><i class="bi bi-box-arrow-in-down"></i> Entrada</button>
+                        <button name="tipo" value="salida" class="btn btn-outline-danger flex-fill"><i class="bi bi-box-arrow-up"></i> Retiro</button>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
+    <div class="col-lg-8">
+        <div class="tarjeta">
+            <h2>Kárdex del producto <small>últimos movimientos</small></h2>
+            <table class="tabla">
+                <thead><tr><th>Fecha</th><th>Tipo</th><th class="num">Cantidad</th><th class="num">Saldo</th><th>Detalle</th></tr></thead>
+                <tbody>
+                    @foreach (var m in movimientos)
+                    {
+                        <tr>
+                            <td>@Ui.FechaHora(m.Fecha)</td>
+                            <td>@Ui.Movimiento(m.Tipo)</td>
+                            <td class="num @(m.Tipo == "ENTRADA" ? "text-success" : "text-danger")">@(m.Tipo == "ENTRADA" ? "+" : "−")@m.Cantidad</td>
+                            <td class="num fw-semibold">@m.StockResultante</td>
+                            <td>@m.Detalle</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+@model Empleado
+@{
+    bool nuevo = Model.Id == 0;
+    ViewData["Title"] = nuevo ? "Nuevo empleado" : "Editar empleado";
+    ViewData["Seccion"] = "Talento humano · Empleados";
+}
+
+<div class="tarjeta" style="max-width:760px">
+    <form method="post" asp-action="@(nuevo ? "Crear" : "Editar")">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label asp-for="Cedula" class="form-label">Cédula</label>
+                <input asp-for="Cedula" class="form-control" readonly="@(!nuevo)" />
+                <span asp-validation-for="Cedula" class="field-validation-error"></span>
+            </div>
+            <div class="col-md-8">
+                <label asp-for="Nombre" class="form-label">Nombre completo</label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="field-validation-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Cargo" class="form-label">Cargo</label>
+                <select asp-for="Cargo" class="form-select">
+                    @foreach (var c in Cargos.Todos) { <option value="@c">@Cargos.Nombre(c)</option> }
+                </select>
+                <small class="text-secondary">Técnico: horas extra (ARL clase 4) · Asesor: comisión del 2 % · Gerente: bonificación no salarial</small>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TipoContrato" class="form-label">Tipo de contrato</label>
+                <select asp-for="TipoContrato" class="form-select">
+                    @foreach (var t in Cargos.Contratos) { <option value="@t">@t.Replace("_", " ")</option> }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="SalarioBase" class="form-label">Salario base (COP)</label>
+                <input asp-for="SalarioBase" type="number" step="1" class="form-control" />
+                <small class="text-secondary">Mínimo legal 2026: @Ui.Pesos(ParametrosNomina.Smmlv)</small>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="FechaIngreso" class="form-label">Fecha de ingreso</label>
+                <input asp-for="FechaIngreso" type="date" class="form-control" readonly="@(!nuevo)" />
+            </div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button class="btn btn-kubo"><i class="bi bi-check-lg"></i> Guardar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

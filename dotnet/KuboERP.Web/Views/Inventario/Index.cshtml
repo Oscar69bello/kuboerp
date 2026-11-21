@@ -1,0 +1,69 @@
+@model List<Producto>
+@{
+    ViewData["Title"] = "Inventario";
+    ViewData["Seccion"] = "Logística y almacén";
+    bool criticos = ViewBag.Criticos;
+}
+
+<div class="tarjeta">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <form method="get" class="filtros">
+            <input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por código o nombre" />
+            <select name="categoria" class="form-select" onchange="this.form.submit()">
+                <option value="">Todas las categorías</option>
+                @foreach (var cat in InventarioService.Categorias)
+                {
+                    <option value="@cat" selected="@(ViewBag.Categoria == cat)">@cat</option>
+                }
+            </select>
+            <div class="form-check form-switch ms-1">
+                <input class="form-check-input" type="checkbox" name="criticos" value="true" id="criticos" checked="@criticos" onchange="this.form.submit()" />
+                <label class="form-check-label" for="criticos">Solo stock crítico <span class="etiqueta-critico">@ViewBag.TotalCriticos</span></label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="inactivos" value="true" id="inactivos" checked="@((bool)ViewBag.Inactivos)" onchange="this.form.submit()" />
+                <label class="form-check-label" for="inactivos">Incluir inactivos</label>
+            </div>
+            <button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
+        </form>
+        <div class="d-flex gap-2">
+            <a asp-action="Movimientos" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> Kárdex</a>
+            <a asp-action="Crear" class="btn btn-kubo"><i class="bi bi-plus-lg"></i> Nuevo producto</a>
+        </div>
+    </div>
+
+    <table class="tabla">
+        <thead><tr><th>Código</th><th>Producto</th><th>Categoría</th><th class="num">Stock</th><th>Nivel</th><th class="num">Precio</th><th class="num">Valor</th><th>Movimiento rápido</th></tr></thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                var pct = p.StockMinimo == 0 ? 100 : Math.Min(100, p.Stock * 50 / p.StockMinimo);
+                <tr class="@(p.EsCritico ? "critico" : "")">
+                    <td class="codigo">@p.Codigo</td>
+                    <td>
+                        <a asp-action="Detalle" asp-route-id="@p.Id">@p.Nombre</a>
+                        @if (p.EsCritico) { <span class="etiqueta-critico ms-1">CRÍTICO</span> }
+                        @if (!p.Activo) { <span class="estado estado-off ms-1">INACTIVO</span> }
+                    </td>
+                    <td>@p.Categoria</td>
+                    <td class="num fw-semibold">@p.Stock <span class="text-secondary fw-normal">/ mín. @p.StockMinimo</span></td>
+                    <td><div class="barra-stock"><span class="@(p.EsCritico ? "bajo" : "")" style="width:@pct%"></span></div></td>
+                    <td class="num">@Ui.Pesos(p.PrecioUnitario)</td>
+                    <td class="num">@Ui.Pesos(p.Stock * p.PrecioUnitario)</td>
+                    <td>
+                        @if (p.Activo)
+                        {
+                            <form asp-action="Mover" asp-route-id="@p.Id" method="post" class="d-flex gap-1">
+                                <input type="hidden" name="volver" value="lista" />
+                                <input type="number" name="cantidad" min="1" value="1" class="form-control form-control-sm" style="width:70px" />
+                                <button name="tipo" value="entrada" class="btn btn-sm btn-outline-success" title="Entrada"><i class="bi bi-plus-lg"></i></button>
+                                <button name="tipo" value="salida" class="btn btn-sm btn-outline-danger" title="Retiro"><i class="bi bi-dash-lg"></i></button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.Count == 0) { <div class="vacio">No hay productos con ese filtro</div> }
+</div>

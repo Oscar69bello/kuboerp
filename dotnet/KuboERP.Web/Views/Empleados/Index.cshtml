@@ -1,0 +1,52 @@
+@model List<Empleado>
+@{
+    ViewData["Title"] = "Empleados";
+    ViewData["Seccion"] = "Talento humano";
+    string? cargo = ViewBag.Cargo;
+    string estado = ViewBag.EstadoFiltro;
+}
+
+<div class="tarjeta">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <form method="get" class="filtros">
+            <select name="cargo" class="form-select" onchange="this.form.submit()">
+                <option value="">Todos los cargos</option>
+                @foreach (var c in Cargos.Todos) { <option value="@c" selected="@(cargo == c)">@Cargos.Nombre(c)</option> }
+            </select>
+            <select name="estado" class="form-select" onchange="this.form.submit()">
+                <option value="ACTIVO" selected="@(estado == "ACTIVO")">Activos</option>
+                <option value="RETIRADO" selected="@(estado == "RETIRADO")">Retirados</option>
+                <option value="TODOS" selected="@(estado == "TODOS")">Todos</option>
+            </select>
+        </form>
+        <a asp-action="Crear" class="btn btn-kubo"><i class="bi bi-person-plus"></i> Nuevo empleado</a>
+    </div>
+    <table class="tabla">
+        <thead><tr><th>Cédula</th><th>Nombre</th><th>Cargo</th><th>Contrato</th><th>Ingreso</th><th class="num">Salario base</th><th class="num">ARL</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td class="codigo">@e.Cedula</td>
+                    <td class="fw-semibold">@e.Nombre</td>
+                    <td>@Cargos.Nombre(e.Cargo)</td>
+                    <td>@e.TipoContrato.Replace("_", " ")</td>
+                    <td>@Ui.Fecha(e.FechaIngreso)</td>
+                    <td class="num">@Ui.Pesos(e.SalarioBase)</td>
+                    <td class="num">Clase @e.NivelRiesgoArl</td>
+                    <td>@Ui.Estado(e.Estado)</td>
+                    <td class="text-end text-nowrap">
+                        @if (e.Estado == "ACTIVO")
+                        {
+                            <a asp-action="Editar" asp-route-id="@e.Id" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <form asp-action="Desvincular" asp-route-id="@e.Id" method="post" class="d-inline" onsubmit="return confirm('¿Desvincular a @e.Nombre?')">
+                                <button class="btn btn-sm btn-outline-danger" title="Desvincular"><i class="bi bi-person-dash"></i></button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.Count == 0) { <div class="vacio">No hay empleados con ese filtro</div> }
+</div>

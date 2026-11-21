@@ -1,0 +1,134 @@
+﻿@model TableroViewModel
+@{
+    ViewData["Title"] = "Tablero gerencial";
+    ViewData["Seccion"] = "Visión ejecutiva · " + Ui.Fecha(DateTime.Today);
+    var maxCat = Model.InventarioPorCategoria.Count == 0 ? 1 : Model.InventarioPorCategoria.Max(x => x.Valor);
+}
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6 col-xl-3">
+        <a asp-controller="Ordenes" asp-action="Index" class="text-decoration-none text-reset">
+            <div class="tarjeta kpi">
+                <span class="icono"><i class="bi bi-cart-check"></i></span>
+                <span class="etiqueta">Compras del mes</span>
+                <span class="valor">@Ui.Pesos(Model.ComprasDelMes)</span>
+                <span class="nota">@Model.OrdenesPendientes pendientes · @Model.OrdenesAprobadas aprobadas por recibir</span>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <a asp-controller="Inventario" asp-action="Index" class="text-decoration-none text-reset">
+            <div class="tarjeta kpi">
+                <span class="icono verde"><i class="bi bi-box-seam"></i></span>
+                <span class="etiqueta">Valor del inventario</span>
+                <span class="valor">@Ui.Pesos(Model.ValorInventario)</span>
+                <span class="nota">@Model.ProductosActivos productos activos</span>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <a asp-controller="Inventario" asp-action="Index" asp-route-criticos="true" class="text-decoration-none text-reset">
+            <div class="tarjeta kpi">
+                <span class="icono rojo"><i class="bi bi-exclamation-triangle"></i></span>
+                <span class="etiqueta">Productos en stock crítico</span>
+                <span class="valor">@Model.Criticos.Count</span>
+                <span class="nota">Requieren orden de compra</span>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <a asp-controller="Nomina" asp-action="Index" class="text-decoration-none text-reset">
+            <div class="tarjeta kpi">
+                <span class="icono ambar"><i class="bi bi-people"></i></span>
+                <span class="etiqueta">Costo de la nómina @(Model.UltimoPeriodo is null ? "" : "· " + Ui.Periodo(Model.UltimoPeriodo))</span>
+                <span class="valor">@Ui.Pesos(Model.CostoUltimaNomina)</span>
+                <span class="nota">@Model.EmpleadosActivos empleados activos</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-xl-7">
+        <div class="tarjeta h-100">
+            <h2><i class="bi bi-exclamation-triangle text-danger"></i> Alertas de stock crítico <small>del más urgente al menos urgente</small></h2>
+            @if (Model.Criticos.Count == 0)
+            {
+                <div class="vacio"><i class="bi bi-check2-circle fs-3 text-success"></i><br />Ningún producto está en stock crítico</div>
+            }
+            else
+            {
+                <table class="tabla">
+                    <thead><tr><th>Producto</th><th class="num">Stock</th><th class="num">Mínimo</th><th class="num">Sugerido</th><th></th></tr></thead>
+                    <tbody>
+                        @foreach (var p in Model.Criticos)
+                        {
+                            <tr>
+                                <td><span class="codigo">@p.Codigo</span><br /><a asp-controller="Inventario" asp-action="Detalle" asp-route-id="@p.Id">@p.Nombre</a></td>
+                                <td class="num text-danger fw-semibold">@p.Stock</td>
+                                <td class="num">@p.StockMinimo</td>
+                                <td class="num">@p.CantidadSugerida</td>
+                                <td class="text-end"><a class="btn btn-sm btn-outline-secondary" asp-controller="Ordenes" asp-action="Crear"><i class="bi bi-cart-plus"></i> Comprar</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="tarjeta h-100">
+            <h2><i class="bi bi-bar-chart"></i> Inventario por categoría <small>valor en bodega</small></h2>
+            @foreach (var (cat, valor) in Model.InventarioPorCategoria)
+            {
+                <div class="barra-cat">
+                    <span class="nombre">@cat</span>
+                    <span class="pista"><span style="width:@((int)(valor * 100 / maxCat))%"></span></span>
+                    <span class="monto">@Ui.Pesos(valor)</span>
+                </div>
+            }
+            <hr />
+            <div class="dato"><span>Proveedores activos</span><b>@Model.ProveedoresActivos</b></div>
+            <div class="dato"><span>Presupuesto disponible con proveedores</span><b>@Ui.Pesos(Model.PresupuestoDisponible)</b></div>
+            <div class="dato"><span>Solicitudes de cotización abiertas</span><b>@Model.SolicitudesAbiertas</b></div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-xl-7">
+        <div class="tarjeta h-100">
+            <h2><i class="bi bi-receipt"></i> Últimas órdenes de compra</h2>
+            <table class="tabla">
+                <thead><tr><th>Orden</th><th>Proveedor</th><th>Fecha</th><th class="num">Monto</th><th>Estado</th></tr></thead>
+                <tbody>
+                    @foreach (var o in Model.UltimasOrdenes)
+                    {
+                        <tr>
+                            <td><a class="codigo" asp-controller="Ordenes" asp-action="Detalle" asp-route-id="@o.Id">@o.Codigo</a></td>
+                            <td>@o.Proveedor?.Nombre</td>
+                            <td>@Ui.Fecha(o.Fecha)</td>
+                            <td class="num">@Ui.Pesos(o.Monto)</td>
+                            <td>@Ui.EstadoOrden(o.Estado)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="tarjeta h-100">
+            <h2><i class="bi bi-arrow-left-right"></i> Últimos movimientos de inventario</h2>
+            <ul class="linea-tiempo">
+                @foreach (var m in Model.UltimosMovimientos)
+                {
+                    <li>
+                        <b class="@(m.Tipo == "ENTRADA" ? "text-success" : "text-danger")">@(m.Tipo == "ENTRADA" ? "+" : "−")@m.Cantidad</b>
+                        @m.Producto?.Nombre
+                        <div class="text-secondary small">@m.Detalle · @Ui.FechaHora(m.Fecha)</div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

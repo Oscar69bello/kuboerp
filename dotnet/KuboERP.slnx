@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="KuboERP.Specs/KuboERP.Specs.csproj" />
+  <Project Path="KuboERP.Web/KuboERP.Web.csproj" />
+</Solution>

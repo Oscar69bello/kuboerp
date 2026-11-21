@@ -1,0 +1,86 @@
+@model SolicitudCotizacion
+@{
+    ViewData["Title"] = Model.Codigo + " · " + Model.Descripcion;
+    ViewData["Seccion"] = "Compras · Cotizaciones";
+    var proveedores = (List<Proveedor>)ViewBag.Proveedores;
+    var recibidas = Model.Cotizaciones.Where(c => c.Estado == "RECIBIDA").ToList();
+    var mejor = recibidas.Count == 0 ? (decimal?)null : recibidas.Min(c => c.Monto);
+}
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="tarjeta">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="mb-0">Cuadro comparativo</h2>
+                <span>@Ui.Estado(Model.Estado)</span>
+            </div>
+            <table class="tabla">
+                <thead><tr><th>Cotización</th><th>Proveedor</th><th class="num">Monto</th><th class="num">Entrega</th><th>Estado</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var c in Model.Cotizaciones.OrderBy(c => c.Monto))
+                    {
+                        <tr>
+                            <td class="codigo">@c.Codigo</td>
+                            <td>@c.Proveedor?.Nombre</td>
+                            <td class="num fw-semibold">
+                                @Ui.Pesos(c.Monto)
+                                @if (c.Monto == mejor && c.Estado == "RECIBIDA") { <span class="estado estado-ok ms-1">MEJOR PRECIO</span> }
+                            </td>
+                            <td class="num">@c.DiasEntrega días</td>
+                            <td>@Ui.Estado(c.Estado)</td>
+                            <td class="text-end text-nowrap">
+                                @if (c.Estado == "RECIBIDA")
+                                {
+                                    <form asp-action="Seleccionar" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@c.Id" /><input type="hidden" name="solicitudId" value="@Model.Id" />
+                                        <button class="btn btn-sm btn-kubo"><i class="bi bi-trophy"></i> Seleccionar</button>
+                                    </form>
+                                    <form asp-action="Anular" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@c.Id" /><input type="hidden" name="solicitudId" value="@Model.Id" />
+                                        <button class="btn btn-sm btn-outline-danger" title="Anular"><i class="bi bi-x-lg"></i></button>
+                                    </form>
+                                }
+                                @if (c.Estado == "SELECCIONADA")
+                                {
+                                    <a asp-controller="Ordenes" asp-action="Crear" asp-route-proveedorId="@c.ProveedorId" class="btn btn-sm btn-outline-secondary"><i class="bi bi-cart-plus"></i> Crear orden</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.Cotizaciones.Count == 0) { <div class="vacio">Aún no hay cotizaciones para esta solicitud</div> }
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="tarjeta">
+            <h2><i class="bi bi-plus-circle"></i> Registrar cotización</h2>
+            @if (Model.Estado != "ABIERTA")
+            {
+                <div class="alert alert-secondary small mb-0">La solicitud está cerrada: ya no recibe cotizaciones.</div>
+            }
+            else
+            {
+                <form asp-action="Registrar" method="post">
+                    <input type="hidden" name="solicitudId" value="@Model.Id" />
+                    <div class="mb-2">
+                        <label class="form-label">Proveedor</label>
+                        <select name="proveedorId" class="form-select">
+                            @foreach (var p in proveedores) { <option value="@p.Id">@p.Nombre</option> }
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Monto total (COP)</label>
+                        <input type="number" name="monto" step="1" class="form-control" placeholder="0" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Días de entrega</label>
+                        <input type="number" name="diasEntrega" value="5" min="0" class="form-control" />
+                    </div>
+                    <button class="btn btn-kubo w-100"><i class="bi bi-check-lg"></i> Registrar</button>
+                </form>
+            }
+            <a asp-action="Index" class="btn btn-link px-0 mt-2"><i class="bi bi-arrow-left"></i> Todas las solicitudes</a>
+        </div>
+    </div>
+</div>

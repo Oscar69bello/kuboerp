@@ -1,0 +1,50 @@
+@model List<SolicitudCotizacion>
+@{
+    ViewData["Title"] = "Cotizaciones";
+    ViewData["Seccion"] = "Compras";
+}
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="tarjeta">
+            <h2>Solicitudes de cotización</h2>
+            <table class="tabla">
+                <thead><tr><th>Solicitud</th><th>Descripción</th><th>Fecha</th><th class="num">Cotizaciones</th><th class="num">Mejor oferta</th><th>Estado</th></tr></thead>
+                <tbody>
+                    @foreach (var s in Model)
+                    {
+                        var vigentes = s.Cotizaciones.Where(c => c.Estado != "ANULADA").ToList();
+                        <tr>
+                            <td><a class="codigo" asp-action="Solicitud" asp-route-id="@s.Id">@s.Codigo</a></td>
+                            <td><a asp-action="Solicitud" asp-route-id="@s.Id">@s.Descripcion</a></td>
+                            <td>@Ui.Fecha(s.Fecha)</td>
+                            <td class="num">@vigentes.Count</td>
+                            <td class="num">@(vigentes.Count == 0 ? "—" : Ui.Pesos(vigentes.Min(c => c.Monto)))</td>
+                            <td>@Ui.Estado(s.Estado)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.Count == 0) { <div class="vacio">Todavía no hay solicitudes</div> }
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="tarjeta">
+            <h2><i class="bi bi-plus-circle"></i> Abrir solicitud</h2>
+            <form asp-action="Abrir" method="post">
+                <div class="mb-2">
+                    <label class="form-label">Código</label>
+                    <input name="codigo" value="@ViewBag.SiguienteCodigo" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">¿Qué se necesita comprar?</label>
+                    <textarea name="descripcion" rows="3" class="form-control" placeholder="Ej. Iluminación LED para bodega"></textarea>
+                </div>
+                <button class="btn btn-kubo w-100"><i class="bi bi-send"></i> Abrir solicitud</button>
+            </form>
+            <p class="small text-secondary mt-3 mb-0">
+                Cada proveedor activo cotiza una sola vez por solicitud. Al seleccionar la ganadora, las demás se rechazan y la solicitud se cierra.
+            </p>
+        </div>
+    </div>
+</div>

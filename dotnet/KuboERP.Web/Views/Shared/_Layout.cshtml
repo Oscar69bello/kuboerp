@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · KuboERP</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+@{
+    var c = ViewContext.RouteData.Values["controller"]?.ToString();
+    string Act(params string[] ctrls) => ctrls.Contains(c) ? "activo" : "";
+}
+<body>
+    <aside class="lateral">
+        <a class="marca" asp-controller="Home" asp-action="Index">
+            <span class="cubo">K</span>
+            <span>
+                <span class="nombre">Kubo<b>ERP</b></span>
+                <span class="lema">AUTOMATIZA · INTEGRA · OPTIMIZA</span>
+            </span>
+        </a>
+
+        <nav>
+            <a class="@Act("Home")" asp-controller="Home" asp-action="Index"><i class="bi bi-grid-1x2"></i> Tablero gerencial</a>
+
+            <div class="grupo">Compras</div>
+            <a class="@Act("Proveedores")" asp-controller="Proveedores" asp-action="Index"><i class="bi bi-buildings"></i> Proveedores</a>
+            <a class="@Act("Cotizaciones")" asp-controller="Cotizaciones" asp-action="Index"><i class="bi bi-file-earmark-text"></i> Cotizaciones</a>
+            <a class="@Act("Ordenes")" asp-controller="Ordenes" asp-action="Index"><i class="bi bi-cart-check"></i> Órdenes de compra</a>
+
+            <div class="grupo">Logística y almacén</div>
+            <a class="@Act("Inventario")" asp-controller="Inventario" asp-action="Index"><i class="bi bi-box-seam"></i> Inventario</a>
+
+            <div class="grupo">Talento humano</div>
+            <a class="@Act("Empleados")" asp-controller="Empleados" asp-action="Index"><i class="bi bi-people"></i> Empleados</a>
+            <a class="@Act("Nomina")" asp-controller="Nomina" asp-action="Index"><i class="bi bi-cash-coin"></i> Nómina</a>
+        </nav>
+
+        <div class="pie-lateral">
+            <span class="punto"></span>
+            <div>
+                <div class="fw-semibold">ElectroSoluciones S.A.S.</div>
+                <small>SQL Server · ASP.NET Core 10</small>
+            </div>
+        </div>
+    </aside>
+
+    <div class="contenido">
+        <header class="barra">
+            <div>
+                <div class="migas">@ViewData["Seccion"]</div>
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="usuario">
+                <span class="avatar">OB</span>
+                <div>
+                    <div class="fw-semibold">Oscar Bello</div>
+                    <small>Gerencia general</small>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            @if (TempData["Exito"] is string ok)
+            {
+                <div class="alert alert-success alert-dismissible fade show aviso" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> @ok
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
+            @if (TempData["Error"] is string err)
+            {
+                <div class="alert alert-danger alert-dismissible fade show aviso" role="alert">
+                    <i class="bi bi-exclamation-octagon-fill"></i> <b>Regla de negocio:</b> @err
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

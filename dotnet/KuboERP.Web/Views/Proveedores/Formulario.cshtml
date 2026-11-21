@@ -1,0 +1,54 @@
+@model Proveedor
+@{
+    bool nuevo = Model.Id == 0;
+    ViewData["Title"] = nuevo ? "Nuevo proveedor" : "Editar proveedor";
+    ViewData["Seccion"] = "Compras · Proveedores";
+}
+
+<div class="tarjeta" style="max-width:760px">
+    <form method="post" asp-action="@(nuevo ? "Crear" : "Editar")">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label asp-for="Nit" class="form-label">NIT</label>
+                @if (nuevo)
+                {
+                    <input asp-for="Nit" class="form-control" placeholder="9 o 10 dígitos" />
+                    <span asp-validation-for="Nit" class="field-validation-error"></span>
+                }
+                else
+                {
+                    <input asp-for="Nit" class="form-control" readonly />
+                    <small class="text-secondary">El NIT no se modifica</small>
+                }
+            </div>
+            <div class="col-md-7">
+                <label asp-for="Nombre" class="form-label">Razón social</label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="field-validation-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Correo" class="form-label">Correo</label>
+                <input asp-for="Correo" class="form-control" />
+                <span asp-validation-for="Correo" class="field-validation-error"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Telefono" class="form-label">Teléfono</label>
+                <input asp-for="Telefono" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Presupuesto" class="form-label">Presupuesto de compras (COP)</label>
+                <input asp-for="Presupuesto" type="number" step="1" class="form-control" />
+                <span asp-validation-for="Presupuesto" class="field-validation-error"></span>
+                <small class="text-secondary">Cada orden aprobada lo descuenta</small>
+            </div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button class="btn btn-kubo"><i class="bi bi-check-lg"></i> Guardar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

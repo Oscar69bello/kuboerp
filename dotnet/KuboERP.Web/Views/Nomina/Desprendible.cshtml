@@ -1,0 +1,49 @@
+@model DesprendibleNomina
+@{
+    ViewData["Title"] = "Desprendible de nómina";
+    ViewData["Seccion"] = "Talento humano · Nómina · " + Ui.Periodo(Model.Periodo);
+    var e = Model.Empleado!;
+}
+
+<div class="tarjeta" style="max-width:860px">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <div class="fw-titulo fs-5 fw-semibold">@e.Nombre</div>
+            <div class="text-secondary small">C.C. @e.Cedula · @Cargos.Nombre(e.Cargo) · Contrato @e.TipoContrato.Replace("_", " ") · ARL clase @e.NivelRiesgoArl</div>
+        </div>
+        <div class="text-end">
+            <div class="small text-secondary">ElectroSoluciones S.A.S.</div>
+            <div class="fw-semibold">@Ui.Periodo(Model.Periodo)</div>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <h2>Devengados</h2>
+            <div class="dato"><span>Salario base</span><span>@Ui.Pesos(e.SalarioBase)</span></div>
+            <div class="dato"><span>Días laborados</span><span>@Model.DiasLaborados</span></div>
+            @if (Model.HorasExtra > 0) { <div class="dato"><span>Horas extra diurnas (recargo 25 %)</span><span>@Model.HorasExtra h</span></div> }
+            @if (Model.Ventas > 0) { <div class="dato"><span>Ventas del mes (comisión 2 %)</span><span>@Ui.Pesos(Model.Ventas)</span></div> }
+            <div class="dato"><span>Devengado salarial</span><b>@Ui.Pesos(Model.DevengadoSalarial)</b></div>
+            <div class="dato"><span>Auxilio de transporte</span><span>@Ui.Pesos(Model.AuxilioTransporte)</span></div>
+            <div class="dato"><span>Bonificación no salarial</span><span>@Ui.Pesos(Model.DevengadoNoSalarial)</span></div>
+            <div class="dato"><span class="fw-semibold text-dark">Total devengado</span><b class="total">@Ui.Pesos(Model.TotalDevengado)</b></div>
+        </div>
+        <div class="col-md-6">
+            <h2>Deducciones</h2>
+            <div class="dato"><span>Ingreso base de cotización (IBC)</span><span>@Ui.Pesos(Model.Ibc)</span></div>
+            <div class="dato"><span>Salud (4 %)</span><span class="text-danger">−@Ui.Pesos(Model.Salud)</span></div>
+            <div class="dato"><span>Pensión (4 %)</span><span class="text-danger">−@Ui.Pesos(Model.Pension)</span></div>
+            <div class="dato"><span>Fondo de Solidaridad Pensional (1 %)</span><span class="text-danger">−@Ui.Pesos(Model.SolidaridadPensional)</span></div>
+            <div class="dato"><span class="fw-semibold text-dark">Total deducciones</span><b class="text-danger">−@Ui.Pesos(Model.TotalDeducciones)</b></div>
+            <div class="alert alert-success mt-3 mb-2 d-flex justify-content-between">
+                <span class="fw-semibold">Neto a pagar</span><b class="total">@Ui.Pesos(Model.Neto)</b>
+            </div>
+            <div class="dato"><span>Aportes del empleador (pensión, ARL, caja@(Model.DevengadoSalarial >= 10 * ParametrosNomina.Smmlv ? ", salud, SENA, ICBF" : ""))</span><span>@Ui.Pesos(Model.AportesEmpleador)</span></div>
+            <div class="dato"><span>Costo total para la empresa</span><b>@Ui.Pesos(Model.CostoEmpleador)</b></div>
+        </div>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+        <a asp-action="Index" asp-route-periodo="@Model.Periodo" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+        <button class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer"></i> Imprimir</button>
+    </div>
+</div>

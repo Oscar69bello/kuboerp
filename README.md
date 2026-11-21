@@ -14,6 +14,25 @@ con **pruebas unitarias desde el primer minuto** (TDD) y escenarios de comportam
 | **Profesor** | Carlos Eduardo Mujica Reyes |
 | **Institución** | Universidad de Cundinamarca |
 
+## ERP en Visual Studio (C# · ASP.NET Core · SQL Server)
+
+Solución `dotnet/KuboERP.slnx` para **Visual Studio 2026**. El proyecto `KuboERP.Web` es una aplicación
+**ASP.NET Core MVC (.NET 10)** con **Entity Framework Core** y **SQL Server LocalDB** que implementa los módulos del ERP
+con las mismas reglas de negocio del dominio en Python:
+
+| Módulo | Funcionalidades |
+|---|---|
+| Tablero gerencial | Compras del mes, valor del inventario, stock crítico, costo de nómina, alertas y últimos movimientos |
+| Proveedores | CRUD con NIT único y válido; con historial no se elimina, queda INACTIVO |
+| Cotizaciones | Solicitudes, cuadro comparativo, una cotización por proveedor, selección de la ganadora |
+| Órdenes de compra | PENDIENTE → APROBADA (descuenta presupuesto) → RECIBIDA (entra al inventario); cancelación con justificación y auditoría |
+| Inventario | CRUD, entradas y retiros, kárdex, stock crítico con cantidad sugerida |
+| Empleados | CRUD por cargo y contrato, salario mínimo legal, desvinculación |
+| Nómina | Liquidación mensual con normativa colombiana 2026 y desprendible por empleado |
+
+Abrir la solución, elegir el perfil **https** y pulsar ▶. La base de datos se crea sola con datos de ejemplo; el perfil
+**«Reiniciar datos de ejemplo»** la deja limpia. Guion del video: [`docs/4-sprint-3/Guion_video_KuboERP.md`](docs/4-sprint-3/Guion_video_KuboERP.md).
+
 ## Gestión ágil
 
 Cronograma de iteraciones, roles, Product Backlog y actas de cada sprint en [`docs/`](docs/README.md).

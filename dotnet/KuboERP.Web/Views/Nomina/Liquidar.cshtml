@@ -1,0 +1,58 @@
+@model List<Empleado>
+@{
+    ViewData["Title"] = "Liquidar nómina";
+    ViewData["Seccion"] = "Talento humano · Nómina";
+}
+
+<form asp-action="Liquidar" method="post">
+    <div class="tarjeta mb-3">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label">Periodo</label>
+                <input type="month" name="periodo" value="@ViewBag.Periodo" class="form-control" />
+            </div>
+            <div class="col-md-9 small text-secondary">
+                Parámetros 2026: SMMLV @Ui.Pesos(ParametrosNomina.Smmlv) · auxilio de transporte @Ui.Pesos(ParametrosNomina.AuxilioTransporte) ·
+                jornada de @ParametrosNomina.HorasMensuales h/mes · salud 4 % y pensión 4 % del trabajador · Fondo de Solidaridad desde 4 SMMLV.
+            </div>
+        </div>
+    </div>
+
+    <div class="tarjeta">
+        <h2>Novedades del periodo <small>las reporta el jefe inmediato</small></h2>
+        <table class="tabla">
+            <thead><tr><th>Empleado</th><th>Cargo</th><th class="num">Salario base</th><th class="num">Días laborados</th><th class="num">Horas extra diurnas</th><th class="num">Ventas del mes</th><th class="num">Bonificación no salarial</th></tr></thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var e = Model[i];
+                    <tr>
+                        <td class="fw-semibold">@e.Nombre<input type="hidden" name="novedades[@i].EmpleadoId" value="@e.Id" /></td>
+                        <td>@Cargos.Nombre(e.Cargo)</td>
+                        <td class="num">@Ui.Pesos(e.SalarioBase)</td>
+                        <td><input type="number" name="novedades[@i].DiasLaborados" value="30" min="0" max="30" class="form-control form-control-sm text-end" style="width:80px;margin-left:auto" /></td>
+                        <td>
+                            @if (e.Cargo == Cargos.Tecnico)
+                            { <input type="number" name="novedades[@i].HorasExtra" value="0" min="0" class="form-control form-control-sm text-end" style="width:90px;margin-left:auto" /> }
+                            else { <div class="text-end text-secondary">—</div> }
+                        </td>
+                        <td>
+                            @if (e.Cargo == Cargos.Vendedor)
+                            { <input type="number" name="novedades[@i].Ventas" value="0" min="0" step="1" class="form-control form-control-sm text-end" style="width:140px;margin-left:auto" /> }
+                            else { <div class="text-end text-secondary">—</div> }
+                        </td>
+                        <td>
+                            @if (e.Cargo == Cargos.Gerente)
+                            { <input type="number" name="novedades[@i].Bonificacion" value="0" min="0" step="1" class="form-control form-control-sm text-end" style="width:140px;margin-left:auto" /> }
+                            else { <div class="text-end text-secondary">—</div> }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <span class="small text-secondary">Si el periodo ya estaba liquidado, se reemplaza con los nuevos valores.</span>
+            <button class="btn btn-kubo"><i class="bi bi-calculator"></i> Calcular y guardar nómina</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Nueva orden de compra";
+    ViewData["Seccion"] = "Compras · Órdenes de compra";
+    var proveedores = (List<Proveedor>)ViewBag.Proveedores;
+    var productos = (List<Producto>)ViewBag.Productos;
+    int? proveedorId = ViewBag.ProveedorId;
+}
+
+<form asp-action="Crear" method="post">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="tarjeta">
+                <h2>Productos <small>hasta 5 líneas; las vacías se ignoran</small></h2>
+                <table class="tabla" id="lineas">
+                    <thead><tr><th style="width:50%">Producto</th><th class="num">Cantidad</th><th class="num">Precio unitario</th><th class="num">Subtotal</th></tr></thead>
+                    <tbody>
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <select name="productoId" class="form-select form-select-sm producto">
+                                        <option value="0" data-precio="0">— Seleccione —</option>
+                                        @foreach (var p in productos)
+                                        {
+                                            <option value="@p.Id" data-precio="@((long)p.PrecioUnitario)">@p.Codigo · @p.Nombre @(p.EsCritico ? "⚠" : "")</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input type="number" name="cantidad" min="0" value="0" class="form-control form-control-sm text-end cantidad" /></td>
+                                <td><input type="number" name="precio" min="0" step="1" value="0" class="form-control form-control-sm text-end precio" /></td>
+                                <td class="num subtotal">$ 0</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p class="small text-secondary mb-0">⚠ = producto en stock crítico. El precio se propone desde el inventario y se puede ajustar al de la cotización.</p>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="tarjeta">
+                <h2>Resumen</h2>
+                <div class="dato"><span>Código</span><b class="codigo">@ViewBag.Codigo</b></div>
+                <div class="mb-3 mt-2">
+                    <label class="form-label">Proveedor</label>
+                    <select name="proveedorId" class="form-select" id="proveedor">
+                        @foreach (var p in proveedores)
+                        {
+                            <option value="@p.Id" data-presupuesto="@((long)p.Presupuesto)" selected="@(p.Id == proveedorId)">@p.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="dato"><span>Presupuesto disponible</span><b id="presupuesto"></b></div>
+                <div class="dato"><span>Total de la orden</span><b class="total" id="total">$ 0</b></div>
+                <div id="avisoPresupuesto" class="alert alert-warning small py-2 mt-2 d-none">
+                    <i class="bi bi-exclamation-triangle"></i> El total supera el presupuesto: la orden se podrá crear, pero no aprobar.
+                </div>
+                <button class="btn btn-kubo w-100 mt-3"><i class="bi bi-check-lg"></i> Crear orden</button>
+                <a asp-action="Index" class="btn btn-link w-100">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+    const pesos = v => '$ ' + Math.round(v).toLocaleString('es-CO');
+    function recalcular() {
+        let total = 0;
+        document.querySelectorAll('#lineas tbody tr').forEach(tr => {
+            const sub = (+tr.querySelector('.cantidad').value || 0) * (+tr.querySelector('.precio').value || 0);
+            tr.querySelector('.subtotal').textContent = pesos(sub);
+            total += sub;
+        });
+        const presupuesto = +document.querySelector('#proveedor').selectedOptions[0]?.dataset.presupuesto || 0;
+        document.querySelector('#total').textContent = pesos(total);
+        document.querySelector('#presupuesto').textContent = pesos(presupuesto);
+        document.querySelector('#avisoPresupuesto').classList.toggle('d-none', total <= presupuesto);
+    }
+    document.querySelectorAll('.producto').forEach(sel => sel.addEventListener('change', () => {
+        const tr = sel.closest('tr');
+        tr.querySelector('.precio').value = sel.selectedOptions[0].dataset.precio;
+        if (+tr.querySelector('.cantidad').value === 0 && sel.value !== '0') tr.querySelector('.cantidad').value = 1;
+        recalcular();
+    }));
+    document.querySelectorAll('.cantidad, .precio, #proveedor').forEach(el => el.addEventListener('input', recalcular));
+    recalcular();
+</script>
+}

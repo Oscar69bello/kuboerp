@@ -1,0 +1,48 @@
+@model List<Proveedor>
+@{
+    ViewData["Title"] = "Proveedores";
+    ViewData["Seccion"] = "Compras";
+}
+
+<div class="tarjeta">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <form method="get" class="filtros">
+            <input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por nombre o NIT" />
+            <select name="estado" class="form-select" onchange="this.form.submit()">
+                <option value="">Todos los estados</option>
+                <option value="ACTIVO" selected="@(ViewBag.Estado == "ACTIVO")">Activos</option>
+                <option value="INACTIVO" selected="@(ViewBag.Estado == "INACTIVO")">Inactivos</option>
+            </select>
+            <button class="btn btn-outline-secondary"><i class="bi bi-search"></i> Buscar</button>
+        </form>
+        <a asp-action="Crear" class="btn btn-kubo"><i class="bi bi-plus-lg"></i> Nuevo proveedor</a>
+    </div>
+
+    <table class="tabla">
+        <thead><tr><th>NIT</th><th>Proveedor</th><th>Correo</th><th>Teléfono</th><th class="num">Presupuesto disponible</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td class="codigo">@p.Nit</td>
+                    <td><a asp-action="Detalle" asp-route-id="@p.Id">@p.Nombre</a></td>
+                    <td>@p.Correo</td>
+                    <td>@p.Telefono</td>
+                    <td class="num">@Ui.Pesos(p.Presupuesto)</td>
+                    <td>@Ui.Estado(p.Estado)</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Editar" asp-route-id="@p.Id" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="bi bi-pencil"></i></a>
+                        @if (p.Estado == EstadosProveedor.Activo)
+                        {
+                            <form asp-action="Eliminar" asp-route-id="@p.Id" method="post" class="d-inline"
+                                  onsubmit="return confirm('¿Eliminar a @p.Nombre? Si tiene órdenes o cotizaciones quedará INACTIVO.')">
+                                <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.Count == 0) { <div class="vacio">No hay proveedores con ese filtro</div> }
+</div>

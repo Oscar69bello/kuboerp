@@ -8,7 +8,7 @@ Entrega: video grabado en **Microsoft Teams**, alojado en **SharePoint/OneDrive 
 1. Abrir `C:\KuboERP\dotnet\KuboERP.slnx` en **Visual Studio Community 2026**.
 2. En la barra superior, junto al botón verde ▶, elegir el perfil **«Reiniciar datos de ejemplo»** y pulsar ▶ una vez.
    La base de datos queda limpia con los datos de ElectroSoluciones S.A.S. Cerrar el navegador y detener (■).
-3. Volver a elegir el perfil **«https»** (o «http»). Ese es el que se usa en el video.
+3. Volver a elegir el perfil **«http»**. Ese es el que se usa en el video (no pide certificado).
 4. Abrir **Ver → Explorador de objetos de SQL Server** y expandir
    `(localdb)\MSSQLLocalDB → Bases de datos → KuboERP → Tablas`. Dejarlo listo.
 5. Cerrar todo lo que no sea Visual Studio y el navegador que abre la app. Silenciar notificaciones

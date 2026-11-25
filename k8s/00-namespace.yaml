@@ -1,0 +1,7 @@
+# KuboERP · Espacio de nombres propio para aislar los recursos del ERP
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuboerp
+  labels:
+    app.kubernetes.io/part-of: kuboerp

@@ -33,6 +33,19 @@ con las mismas reglas de negocio del dominio en Python:
 Abrir la solución, elegir el perfil **https** y pulsar ▶. La base de datos se crea sola con datos de ejemplo; el perfil
 **«Reiniciar datos de ejemplo»** la deja limpia. Guion del video: [`docs/4-sprint-3/Guion_video_KuboERP.md`](docs/4-sprint-3/Guion_video_KuboERP.md).
 
+## Despliegue (Docker · Kubernetes · Azure)
+
+La misma imagen Docker corre en local con **Docker Compose** (web + SQL Server 2022, http://localhost:8080), en un
+clúster de **Kubernetes** (`kubectl apply -k k8s/`) y en **Azure Container Apps** con Azure SQL
+(`deploy/azure/desplegar.ps1`). Sonda de salud en `/health`. Pasos completos en el
+[manual de despliegue](docs/despliegue/manual-despliegue.md).
+
+```
+cd dotnet
+cp .env.example .env      # cambiar SQL_SA_PASSWORD
+docker compose up -d --build
+```
+
 ## Gestión ágil
 
 Cronograma de iteraciones, roles, Product Backlog y actas de cada sprint en [`docs/`](docs/README.md).

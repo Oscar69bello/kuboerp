@@ -85,6 +85,94 @@ jobs:
       - name: Validar
         run: terraform validate
 
+  dotnet:
+    name: Compilar y probar ASP.NET (.NET 10)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dotnet
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Compilar la solución
+        run: dotnet build KuboERP.slnx -c Release
+
+      - name: Escenarios BDD con Reqnroll
+        run: dotnet test KuboERP.Specs/KuboERP.Specs.csproj -c Release --no-build
+
+  docker:
+    name: Imagen Docker y prueba con Docker Compose
+    runs-on: ubuntu-latest
+    needs: dotnet
+    defaults:
+      run:
+        working-directory: dotnet
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Contraseña temporal de SQL Server
+        run: echo "SQL_SA_PASSWORD=Ci$(openssl rand -hex 12)#Kb1" > .env
+
+      - name: Construir y levantar web + SQL Server
+        run: docker compose up -d --build --wait --wait-timeout 300
+
+      - name: Probar la salud y el tablero
+        run: |
+          curl --fail --retry 10 --retry-delay 6 --retry-all-errors http://localhost:8080/health
+          curl --fail http://localhost:8080/ | grep -q "KuboERP"
+
+      - name: Registros si algo falla
+        if: failure()
+        run: docker compose logs
+
+  kubernetes:
+    name: Despliegue en Kubernetes (kind)
+    runs-on: ubuntu-latest
+    needs: dotnet
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Construir la imagen
+        run: docker build -t kuboerp-web:local dotnet
+
+      - uses: helm/kind-action@v1
+        with:
+          cluster_name: kuboerp
+
+      - name: Cargar la imagen en el clúster
+        run: kind load docker-image kuboerp-web:local --name kuboerp
+
+      - name: Aplicar los manifiestos
+        run: |
+          kubectl apply -f k8s/00-namespace.yaml
+          CLAVE="Ci$(openssl rand -hex 12)#Kb1"
+          kubectl -n kuboerp create secret generic kuboerp-sql \
+            --from-literal=sa-password="$CLAVE" \
+            --from-literal=connection-string="Server=sql,1433;Database=KuboERP;User Id=sa;Password=$CLAVE;TrustServerCertificate=True;MultipleActiveResultSets=true"
+          kubectl apply -k k8s/
+
+      - name: Esperar el despliegue
+        run: |
+          kubectl -n kuboerp rollout status statefulset/sql --timeout=300s
+          kubectl -n kuboerp rollout status deployment/web --timeout=300s
+          kubectl -n kuboerp get pods,svc,hpa
+
+      - name: Probar la aplicación dentro del clúster
+        run: |
+          kubectl -n kuboerp port-forward svc/web 8081:8081 &
+          sleep 5
+          curl --fail --retry 10 --retry-delay 5 --retry-all-errors http://localhost:8081/health
+
+      - name: Diagnóstico si algo falla
+        if: failure()
+        run: |
+          kubectl -n kuboerp describe pods
+          kubectl -n kuboerp logs deployment/web --all-containers --tail=100
+
   plan-azure:
     name: Plan del ambiente de pruebas en Azure
     if: github.event_name == 'workflow_dispatch'

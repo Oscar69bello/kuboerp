@@ -1,0 +1,49 @@
+# KuboERP · Ambiente local con Docker Compose: aplicación web + SQL Server 2022
+#   1. Copiar .env.example a .env y poner una contraseña segura en SQL_SA_PASSWORD
+#   2. docker compose up -d --build
+#   3. Abrir http://localhost:8080
+name: kuboerp
+
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: kuboerp-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      MSSQL_SA_PASSWORD: ${SQL_SA_PASSWORD:?Defina SQL_SA_PASSWORD en el archivo .env}
+    volumes:
+      - sql-datos:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kuboerp-web:local
+    container_name: kuboerp-web
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__KuboERP: "Server=sql,1433;Database=KuboERP;User Id=sa;Password=${SQL_SA_PASSWORD};TrustServerCertificate=True;MultipleActiveResultSets=true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      sql:
+        condition: service_healthy
+    # La imagen de ASP.NET no trae curl: se consulta /health con bash y /dev/tcp
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080 && printf 'GET /health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n' >&3 && grep -q Healthy <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  sql-datos:

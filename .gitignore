@@ -36,3 +36,8 @@ reporte-pruebas.xml
 # Visual Studio
 .vs/
 *.user
+
+# Docker
+.env
+!.env.example
+deploy/azure/.secretos.local

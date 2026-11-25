@@ -36,5 +36,8 @@ patrocinador es su Gerencia General (Acta de Constitución).
 | Sprint 0 | 13 sep 2026 | "Prepara tu nave" · Definición del proyecto y plataformas | Problema y solución, modelo 4+1, arquitectura en capas + DDD, árbol de 6 módulos, requisitos no funcionales, stack Microsoft, presupuesto | [1-sprint-0](1-sprint-0/acta.md) |
 | Sprint 1 | 12 oct 2026 | Diseño y especificación del ERP + Video Figma | KuboERP: Event Storming, 36 RF, 17 RNF, 7 épicas y 41 historias (212 SP), Definition of Done, diagramas PlantUML, mockups y video de los CRUD | [2-sprint-1](2-sprint-1/acta.md) |
 | Sprint 2 | 2 nov 2026 | TDD, BDD y calidad ágil | Incremento de Proveedores y Compras e Inventario con pruebas unitarias, BDD y cobertura del 100 % | [3-sprint-2](3-sprint-2/acta.md) |
+| Sprint 3 | 21 nov 2026 | ERP en Visual Studio: ASP.NET Core MVC con SQL Server | CRUD de los 7 módulos, tablero gerencial, escenarios BDD con Reqnroll y video de demostración | [4-sprint-3](4-sprint-3/acta.md) |
+| Sprint 4 | 4 dic 2026 | Despliegue: Docker, Kubernetes y nube | Imagen Docker, Docker Compose, manifiestos de Kubernetes, despliegue en Azure Container Apps y pipeline de CI | [5-sprint-4](5-sprint-4/acta.md) |
 
-El estado del Product Backlog está en [product-backlog.md](product-backlog.md).
+El estado del Product Backlog está en [product-backlog.md](product-backlog.md). El despliegue con Docker,
+Kubernetes y Azure se explica en el [manual de despliegue](despliegue/manual-despliegue.md).

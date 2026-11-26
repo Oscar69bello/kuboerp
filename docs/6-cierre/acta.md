@@ -34,7 +34,7 @@ Los tres primeros ambientes ejecutan **la misma imagen Docker** (`dotnet/Dockerf
 | HT-04 | Contenerizar la aplicación | `docker compose up` levanta web + SQL Server y `/health` responde *Healthy* | ✔ Ambos contenedores *healthy*; tablero en el puerto 8080 | [01](evidencias/01_docker_compose_contenedores.png), [02](evidencias/02_tablero_docker_8080.png) |
 | HT-05 | Orquestar con Kubernetes | `kubectl apply -k k8s/` despliega 2 réplicas con sondas y escalado automático | ✔ Deployment `web` 2/2, `sql-0` Running, Service en el puerto 8081 | [03](evidencias/03_kubernetes_docker_desktop.png) |
 | HT-06 | Desplegar en Azure | URL pública con HTTPS en Azure Container Apps y base de datos en Azure SQL | ✔ `/health` *Healthy*; http redirige a https | URL de producción |
-| HT-07 | Pipeline de entrega | GitHub Actions compila, prueba la imagen con Compose y despliega en kind | Ver la pestaña *Actions* de la rama `sprint-4/despliegue-docker-kubernetes` | GitHub Actions |
+| HT-07 | Pipeline de entrega | GitHub Actions compila, prueba la imagen con Compose y despliega en kind | ✔ Corrida #10 en verde: .NET + BDD (23 s), Docker Compose (55 s), Kubernetes en kind (2 min 24 s), Python y Terraform | [CI KuboERP #10](https://github.com/Oscar69bello/kuboerp/actions/runs/45741109794) |
 | HT-08 | Cierre del proyecto | Documentación final y acta de cierre | ✔ Este documento | — |
 
 **Definition of Done**

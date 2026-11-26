@@ -1,7 +1,7 @@
 # KuboERP · Gestión ágil del proyecto
 
-Documentación de las iteraciones del proyecto **KuboERP**, el ERP de **ElectroSoluciones S.A.S.**, empresa que
-comercializa materiales eléctricos y presta servicios técnicos de instalación, mantenimiento y reparación.
+Documentación de las iteraciones del proyecto **KuboERP**, un ERP web de compras, inventario y nómina que no está
+hecho para una empresa en particular; los datos de ejemplo corresponden a una empresa ficticia del sector eléctrico.
 Hasta el Sprint 0 el proyecto se llamó *ElectroSoluciones Digital*; desde el Sprint 1 se llama **KuboERP**.
 
 | | |
@@ -25,8 +25,8 @@ Se trabaja con **Scrum**. Oscar Javier Bello Daza asume los tres roles del equip
 El seguimiento del trabajo se lleva en el tablero **GitHub Projects · KuboERP · Scrum**, ligado a este
 repositorio: cada iteración es un *milestone* y cada historia o tarea es un *issue*.
 
-En el producto simulado, el Product Owner representa a la Gerencia Comercial de ElectroSoluciones S.A.S. y el
-patrocinador es su Gerencia General (Acta de Constitución).
+En el producto simulado, el Product Owner representa a la gerencia comercial de una empresa usuaria y el
+patrocinador a su gerencia general (Acta de Constitución).
 
 ## Cronograma de iteraciones
 

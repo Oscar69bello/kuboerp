@@ -12,8 +12,8 @@ Alcance de esta versión: incremento de **Proveedores y Compras, Inventario y Bo
 
 ## 1. Introducción y metas
 
-KuboERP es el ERP de **ElectroSoluciones S.A.S.**, empresa que vende materiales eléctricos y presta servicios
-técnicos de instalación, mantenimiento y reparación. El Sprint 2 construye el primer incremento ejecutable de los
+KuboERP es un ERP web de compras, inventario y nómina que no está hecho para una empresa en particular; los datos
+de ejemplo corresponden a una empresa ficticia del sector eléctrico. El Sprint 2 construye el primer incremento ejecutable de los
 módulos internos.
 
 **Requerimientos principales del incremento**

@@ -3,3 +3,5 @@
 @using KuboERP.Web.Services
 @using KuboERP.Web.Controllers
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@* Nombre de la empresa que usa KuboERP: se configura en appsettings.json o con la variable Empresa__Nombre *@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuracion

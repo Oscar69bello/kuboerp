@@ -3,7 +3,7 @@ using KuboERP.Web.Services;
 
 namespace KuboERP.Web.Data;
 
-/// <summary>Datos de ejemplo de ElectroSoluciones S.A.S. para la primera ejecución.</summary>
+/// <summary>Datos de ejemplo (una empresa de demostración del sector eléctrico) para la primera ejecución.</summary>
 public static class DatosIniciales
 {
     public static void Cargar(KuboDbContext db)

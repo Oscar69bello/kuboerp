@@ -2,8 +2,9 @@
 
 **Automatiza • Integra • Optimiza**
 
-KuboERP es un ERP para una empresa que vende productos eléctricos y presta servicios eléctricos
-residenciales, comerciales e industriales. Este repositorio contiene el **incremento** de los módulos de
+KuboERP es un ERP web de compras, inventario y nómina. No está hecho para una empresa en particular: lo puede usar
+cualquier organización que compre, almacene y pague nómina; el nombre de la empresa se configura en
+`appsettings.json` (`Empresa:Nombre`) y los datos de ejemplo son de una empresa ficticia. Este repositorio contiene el **incremento** de los módulos de
 **Compras, Logística y Almacén**: proveedores, cotizaciones, órdenes de compra e inventario, desarrollados
 con **pruebas unitarias desde el primer minuto** (TDD) y escenarios de comportamiento en español (BDD).
 

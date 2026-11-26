@@ -12,7 +12,7 @@
             <div class="text-secondary small">C.C. @e.Cedula · @Cargos.Nombre(e.Cargo) · Contrato @e.TipoContrato.Replace("_", " ") · ARL clase @e.NivelRiesgoArl</div>
         </div>
         <div class="text-end">
-            <div class="small text-secondary">ElectroSoluciones S.A.S.</div>
+            <div class="small text-secondary">@(Configuracion["Empresa:Nombre"] ?? "Empresa de demostración")</div>
             <div class="fw-semibold">@Ui.Periodo(Model.Periodo)</div>
         </div>
     </div>

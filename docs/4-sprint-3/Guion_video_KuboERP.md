@@ -49,8 +49,8 @@ Cómo leer este guion:
 
 🗣️ «Buenas tardes, profesor Carlos Eduardo Mujica Reyes. Soy Oscar Javier Bello Daza, de Ingeniería de Sistemas y
 Computación de la Universidad de Cundinamarca, extensión Chía, en la materia Proyecto de Ingeniería de Software II.
-Voy a presentar **KuboERP**, el sistema de planificación de recursos para **ElectroSoluciones S.A.S.**, una empresa
-que vende materiales eléctricos y presta servicios de instalación. El ERP está desarrollado completamente en
+Voy a presentar **KuboERP**, un sistema de planificación de recursos empresariales que no está hecho para una empresa
+en particular: los datos que verán son de una empresa ficticia del sector eléctrico. El ERP está desarrollado completamente en
 **Visual Studio** con **C#**, **ASP.NET Core MVC**, **Entity Framework Core** y base de datos **SQL Server**. Integra
 los módulos de **compras, inventario y talento humano con nómina**.»
 

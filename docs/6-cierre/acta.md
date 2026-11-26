@@ -1,6 +1,6 @@
 # Cierre del proyecto · KuboERP
 
-**ERP de ElectroSoluciones S.A.S. publicado en Internet** · Fecha de cierre: 25 de noviembre de 2026
+**ERP web de compras, inventario y nómina publicado en Internet** · Fecha de cierre: 25 de noviembre de 2026
 Responsable: Oscar Javier Bello Daza (Product Owner, Scrum Master y equipo de desarrollo)
 
 ## Aplicación en producción

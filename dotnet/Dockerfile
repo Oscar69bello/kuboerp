@@ -18,7 +18,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 
 LABEL org.opencontainers.image.title="KuboERP" \
-      org.opencontainers.image.description="ERP de ElectroSoluciones S.A.S.: compras, inventario y nómina" \
+      org.opencontainers.image.description="ERP web: compras, inventario y nómina" \
       org.opencontainers.image.source="https://github.com/Oscar69bello/kuboerp"
 
 # Kestrel escucha en el puerto 8080 sin privilegios; el TLS lo pone el balanceador (Container Apps o Ingress)

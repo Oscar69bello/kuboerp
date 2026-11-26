@@ -26,7 +26,9 @@ equipo del desarrollador, en un clúster de Kubernetes y en Microsoft Azure, ver
 | Integración continua | `.github/workflows/ci.yml` | Jobs `dotnet`, `docker` y `kubernetes` además de Python y Terraform |
 
 ## Sprint Review
-Ver el documento final de entrega (`docs/6-cierre/`) para la demostración, el enlace de despliegue y la evidencia.
+KuboERP quedó publicado en **https://kuboerp-web.agreeableglacier-e55852c8.spaincentral.azurecontainerapps.io**
+(Azure Container Apps + Azure SQL). La revisión de cada historia técnica, la evidencia y los recursos de Azure están
+en el [acta de cierre](../6-cierre/acta.md).
 
 ## Retrospectiva
 | ¿Qué salió bien? | ¿Qué mejorar? | Acción |

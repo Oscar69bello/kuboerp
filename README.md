@@ -35,6 +35,9 @@ Abrir la solución, elegir el perfil **https** y pulsar ▶. La base de datos se
 
 ## Despliegue (Docker · Kubernetes · Azure)
 
+**En producción:** https://kuboerp-web.agreeableglacier-e55852c8.spaincentral.azurecontainerapps.io
+(Azure Container Apps + Azure SQL). Acta de cierre en [`docs/6-cierre/acta.md`](docs/6-cierre/acta.md).
+
 La misma imagen Docker corre en local con **Docker Compose** (web + SQL Server 2022, http://localhost:8080), en un
 clúster de **Kubernetes** (`kubectl apply -k k8s/`) y en **Azure Container Apps** con Azure SQL
 (`deploy/azure/desplegar.ps1`). Sonda de salud en `/health`. Pasos completos en el

@@ -38,6 +38,7 @@ patrocinador es su Gerencia General (Acta de Constitución).
 | Sprint 2 | 2 nov 2026 | TDD, BDD y calidad ágil | Incremento de Proveedores y Compras e Inventario con pruebas unitarias, BDD y cobertura del 100 % | [3-sprint-2](3-sprint-2/acta.md) |
 | Sprint 3 | 21 nov 2026 | ERP en Visual Studio: ASP.NET Core MVC con SQL Server | CRUD de los 7 módulos, tablero gerencial, escenarios BDD con Reqnroll y video de demostración | [4-sprint-3](4-sprint-3/acta.md) |
 | Sprint 4 | 4 dic 2026 | Despliegue: Docker, Kubernetes y nube | Imagen Docker, Docker Compose, manifiestos de Kubernetes, despliegue en Azure Container Apps y pipeline de CI | [5-sprint-4](5-sprint-4/acta.md) |
+| Cierre | 25 nov 2026 | Cierre del proyecto | KuboERP en producción en Azure, revisión del Sprint 4 y retrospectiva final | [6-cierre](6-cierre/acta.md) |
 
 El estado del Product Backlog está en [product-backlog.md](product-backlog.md). El despliegue con Docker,
 Kubernetes y Azure se explica en el [manual de despliegue](despliegue/manual-despliegue.md).

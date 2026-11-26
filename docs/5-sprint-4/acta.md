@@ -31,6 +31,6 @@ Ver el documento final de entrega (`docs/6-cierre/`) para la demostración, el e
 ## Retrospectiva
 | ¿Qué salió bien? | ¿Qué mejorar? | Acción |
 |---|---|---|
-| Construir la imagen en Azure (`az acr build`) evitó depender de Docker local para desplegar | Docker Desktop exige WSL 2 y reinicio | Documentar los requisitos en el manual de despliegue |
+| La misma imagen Docker probada en local se sube tal cual a Azure Container Registry | Azure for Students limita las regiones y no permite ACR Tasks (`az acr build`) | Desplegar en `brazilsouth` y construir con Docker local antes del `docker push` |
 | La sonda de salud separa "proceso vivo" de "base disponible" | SQL Server tarda en arrancar en contenedores | Reintentos al inicio y `startupProbe` en Kubernetes |
 | El pipeline prueba Compose y Kubernetes en cada push | La cadena de conexión usa usuario y contraseña de SQL | Migrar a identidad administrada de Entra ID |

@@ -55,13 +55,15 @@ az login
 .\deploy\azure\desplegar.ps1                  # primer despliegue (10–15 min)
 .\deploy\azure\desplegar.ps1 -Version v1.1    # nueva versión
 ```
-El script crea en el grupo `rg-kuboerp-prod`:
+Requiere Docker Desktop encendido. Azure for Students solo permite las regiones `northcentralus`, `brazilsouth`,
+`spaincentral`, `chilecentral` y `canadacentral`; el script usa `brazilsouth` (otra con `-Region`). Si esa región no acepta servidores nuevos de Azure SQL, prueba las
+demás permitidas y crea Container Apps en la misma región que la base de datos. Crea en el grupo `rg-kuboerp-prod`:
 
 | Recurso | Configuración |
 |---|---|
-| Azure Container Registry (Basic) | Construye la imagen en la nube con `az acr build`; no requiere Docker local |
+| Azure Container Registry (Basic) | Guarda la imagen; se construye con Docker local y se sube con `docker push` (Azure for Students no permite `az acr build`) |
 | Azure SQL Database | Serverless con oferta gratuita y pausa automática; TLS 1.2; firewall solo para servicios de Azure |
-| Container Apps Environment + Container App | HTTPS público, 0,5 vCPU y 1 GiB, 1 a 3 réplicas; descarga la imagen con identidad administrada |
+| Container Apps Environment + Container App | HTTPS público, 0,5 vCPU y 1 GiB, 1 a 3 réplicas; descarga la imagen con el usuario administrador del registro, guardado como secreto (los ambientes *express* no admiten identidad administrada para el registro) |
 
 Ver el estado y los registros:
 ```powershell
